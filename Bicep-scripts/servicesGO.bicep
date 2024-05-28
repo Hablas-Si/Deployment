@@ -40,9 +40,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
+            { 
+            name: 'ASPNETCORE_HTTP_PORTS' 
+            value: '3005'
+            }
             {
               name: 'Address'
-              value: 'https://vaulthost:8201/'
+              value: 'https://backend:8201/'
             }
             {
               name: 'Token'
@@ -50,7 +54,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
               name: 'UserServiceUrl'
-              value: 'http://userservice:8080'
+              value: 'http://services:3010'
             }
           ]
           resources: {
@@ -71,9 +75,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
+            { 
+              name: 'ASPNETCORE_HTTP_PORTS' 
+              value: '3010'
+              }
             {
               name: 'Address'
-              value: 'https://vaulthost:8201/'
+              value: 'https://backend:8201/'
             }
             {
               name: 'Token'
@@ -98,9 +106,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
+            { 
+              name: 'ASPNETCORE_HTTP_PORTS' 
+              value: '3015'
+            }
             {
               name: 'Address'
-              value: 'https://vaulthost:8201/'
+              value: 'https://backend:8201/'
             }
             {
               name: 'Token'
@@ -108,7 +120,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
              name: 'loki'
-             value: 'http://loki:3100'
+             value: 'http://devops:3100'
             }
           ]
           resources: {
@@ -129,9 +141,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
+            { 
+              name: 'ASPNETCORE_HTTP_PORTS' 
+              value: '3020'
+              }
             {
               name: 'Address'
-              value: 'https://vaulthost:8201/'
+              value: 'https://backend:8201/'
             }
             {
               name: 'Token'
@@ -139,7 +155,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
              name: 'ConnectionURI'
-             value: 'http://catalogservice:8080'
+             value: 'http://services:3015'
             }
           ]
           resources: {
@@ -160,9 +176,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
+            { 
+              name: 'ASPNETCORE_HTTP_PORTS' 
+              value: '3025'
+            }
             {
               name: 'Address'
-              value: 'https://vaulthost:8201/'
+              value: 'https://backend:8201/'
             }
             {
               name: 'Token'
@@ -170,7 +190,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
              name: 'auctionServiceUrl'
-             value: 'http://auctionservice:8080'
+             value: 'http://services:3020'
             }
           ]
           resources: {
@@ -191,9 +211,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
+            { 
+              name: 'ASPNETCORE_HTTP_PORTS' 
+              value: '3030'
+            }
             {
               name: 'Address'
-              value: 'https://vaulthost:8201/'
+              value: 'https://backend:8201/'
             }
             {
               name: 'Token'
@@ -201,11 +225,11 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
              name: 'AuctionServiceUrl'
-             value: 'http://auctionservice:8080'
+             value: 'http://services:3020'
             }
             {
               name: 'UserServiceUrl'
-              value: 'http://userservice:8080'
+              value: 'http://services:3010'
              }
           ]
           resources: {

@@ -32,7 +32,7 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
         name: 'rabbitmq'
         properties: {
           image: 'rabbitmq:management'
-          command: ['tail', '-f', '/dev/null']
+          // command: ['tail', '-f', '/dev/null']
           ports: [
             {
               port: 15672
