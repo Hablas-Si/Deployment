@@ -141,10 +141,10 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
       }
       {
         name: 'vaultconfig'
-        azurefile: {
-          sharename: 'storagevault'
-          storageaccountname: storageAccount.name
-          storageaccountkey: storageAccount.listkeys().keys[0].value
+        azureFile: {
+          shareName: 'storagevault'
+          storageAccountName: storageAccount.name
+          storageAccountKey: storageAccount.listkeys().keys[0].value
         }
       }
     ]

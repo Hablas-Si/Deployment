@@ -14,7 +14,8 @@ resource VNET 'Microsoft.Network/virtualNetworks@2020-11-01' existing = {
   }
 }
 
-// --- Get a reference to the existing storage account ---
+//--- Get a reference to the existing storage account ---
+// bliver aldrig brugt?
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
   name: storageAccountName
 }

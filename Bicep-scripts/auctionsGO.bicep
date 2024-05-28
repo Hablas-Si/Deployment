@@ -15,8 +15,9 @@ var applicationGateWayName = 'goauctionsAppGateway'
 @description('Name of the DNS zone')
 var dnszonename = 'aktionssuperhus.dk'
 
+// har ændret denne værdi
 @description('Public Domain name used when accessing gateway from internet')
-var publicDomainName = 'auktionshusetgo'
+var publicDomainName = 'aktionssuperhus'
 
 @description('List of file shares to create')
 var shareNames = [
