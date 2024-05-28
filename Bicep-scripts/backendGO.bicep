@@ -105,8 +105,8 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
           }
           volumeMounts: [
             {
-              name: 'vaultconfig'
-              mountPath: '/vault/config'
+              name: 'vault'
+              mountPath: '/vault-volume:/data/'
             }
           ]
         }

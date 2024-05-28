@@ -241,6 +241,30 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
           }
         }
       } 
+      {
+        name: 'nginx'
+        properties: {
+          image: 'nginx:latest'
+          ports: [
+            {
+              port: 4000
+            }
+          ]
+          environmentVariables: []
+          resources: {
+            requests: {
+              memoryInGB: json('1.0')
+              cpu: json('0.5')
+            }
+          }
+          volumeMounts: [
+            {
+              name: 'nginx-config'
+              mountPath: '/nginx.conf:/etc/nginx/nginx.conf'
+            }
+          ]
+        }
+      }
     ]
     initContainers: []
     restartPolicy: 'Always'
