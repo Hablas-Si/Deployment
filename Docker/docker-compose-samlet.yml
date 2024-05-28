@@ -1,0 +1,231 @@
+version: "3.7"
+services:
+  vaulthost:
+    image: hashicorp/vault:latest
+    hostname: vaulthost
+    restart: on-failure:10
+    ports:
+      - "8201:8201"
+    environment:
+      VAULT_ADDR: "https://0.0.0.0:8201"
+      VAULT_LOCAL_CONFIG: '{"listener": [{"tcp":{"address": "0.0.0.0:8201","tls_disable": "0", "tls_cert_file":"/data/cert.pem","tls_key_file":"/data/key.pem"}}],"default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
+      VAULT_DEV_ROOT_TOKEN_ID: "00000000-0000-0000-0000-000000000000"
+      VAULT_TOKEN: "00000000-0000-0000-0000-000000000000"
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./vault-volume:/data
+    networks:
+      - my_network
+    healthcheck:
+      retries: 5
+    command: 'server -dev -dev-root-token-id="00000000-0000-0000-0000-000000000000"'
+
+  vault-init:
+    image: hashicorp/vault:latest
+    command: sh "/app/vault_init.sh"
+    depends_on:
+      - vaulthost
+    healthcheck:
+      retries: 5
+    volumes:
+      - ./vault-init/vault_init.sh:/app/vault_init.sh
+    networks:
+      - my_network
+
+  authservice:
+    hostname: authservice
+    depends_on:
+      - userservice
+      - vault-init
+    image: asbjorndev/auctions_authservice-image:1.0.0
+    ports:
+      - "3005:8080"
+    environment:
+      - Address=https://vaulthost:8201/
+      - Token=00000000-0000-0000-0000-000000000000
+      - UserServiceUrl=http://userservice:8080
+    networks:
+      - my_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 11s
+
+  userservice:
+    image: asbjorndev/auction_userservice-image:latest
+    hostname: userservice
+    ports:
+      - "3010:8080"
+    environment:
+      - Address=https://vaulthost:8201/
+      - Token=00000000-0000-0000-0000-000000000000
+    networks:
+      - my_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 11s
+
+  catalogservice:
+    image: chilinhm/catalogservice-image:1.0.0
+    hostname: catalogservice
+    ports:
+      - "3015:8080"
+    environment:
+      - loki=http://loki:3100
+      - Address=https://vaulthost:8201/
+      - Token=00000000-0000-0000-0000-000000000000
+    networks:
+      - my_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 11s
+
+  auctionservice:
+    image: cptfaxe/auctionservice-image:1.0.0
+    hostname: auctionservice
+    ports:
+      - "3020:8080"
+    environment:
+      - ConnectionURI=http://catalogservice:8080
+      - Address=https://vaulthost:8201/
+      - Token=00000000-0000-0000-0000-000000000000
+    networks:
+      - my_network
+    depends_on:
+      - catalogservice
+    healthcheck:
+      test: ["CMD", "nc", "-z", "catalogservice", "8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 11s
+
+  biddingservice:
+    image: jakobmagni/biddingservice-image:1.0.0
+    ports:
+      - "3025:8080"
+    environment:
+      - auctionServiceUrl=http://auctionservice:8080
+      - Address=https://vaulthost:8201/
+      - Token=00000000-0000-0000-0000-000000000000
+    networks:
+      - my_network
+    depends_on:
+      - auctionservice
+    healthcheck:
+      test: ["CMD", "nc", "-z", "catalogservice", "8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 11s
+
+  legalservice:
+    image: asbjorndev/auctions_legalservice-image:latest
+    hostname: legalservice
+    ports:
+      - "3030:8080"
+    environment:
+      - AuctionServiceUrl=http://auctionservice:8080
+      - UserServiceUrl=http://userservice:8080
+      - Address=https://vaulthost:8201/
+      - Token=00000000-0000-0000-0000-000000000000
+    networks:
+      - my_network
+    depends_on:
+      - auctionservice
+      - userservice
+      - vault-init
+    healthcheck:
+      test: ["CMD", "nc", "-z", "catalogservice", "8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 11s
+
+  loki:
+    image: grafana/loki
+    hostname: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - my_network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - authservice
+      - userservice
+      - catalogservice
+      - auctionservice
+      - biddingservice
+      - vaulthost
+      - grafana
+      - loki
+    ports:
+      - "4000:4000"
+    networks:
+      - my_network
+    # Får apiservices til at starte efter 5 sek hvis de fejler fordi vault ikke er klar
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 13s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672" # RabbitMQ default port
+      - "15672:15672" # RabbitMQ management interface
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
