@@ -3,9 +3,9 @@ param location string = resourceGroup().location
 
 param vnetname string = 'theVNet'
 param subnetName string = 'goservicesSubnet'
-param dnsRecordName string ='serviceshostname'
-param dnszonename string='thednszonename.dk'
-param storageAccountName string='nostorage'
+param dnsRecordName string = 'serviceshostname'
+param dnszonename string = 'thednszonename.dk'
+param storageAccountName string = 'nostorage'
 
 resource VNET 'Microsoft.Network/virtualNetworks@2020-11-01' existing = {
   name: vnetname
@@ -18,12 +18,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' existing 
   name: storageAccountName
 }
 
-
 // --- Create the DevOps container group ---
 @description('auktionsHuset services Container Group')
-resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
-
-  name: 'auktionsHusetservicesGroup'
+resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
+  name: 'auktionsHusetServicesGroup'
   location: location
 
   properties: {
@@ -40,9 +38,9 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
-            { 
-            name: 'ASPNETCORE_HTTP_PORTS' 
-            value: '3005'
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
+              value: '3005'
             }
             {
               name: 'Address'
@@ -75,10 +73,10 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
-            { 
-              name: 'ASPNETCORE_HTTP_PORTS' 
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
               value: '3010'
-              }
+            }
             {
               name: 'Address'
               value: 'http://backend:8200/'
@@ -106,8 +104,8 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
-            { 
-              name: 'ASPNETCORE_HTTP_PORTS' 
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
               value: '3015'
             }
             {
@@ -119,8 +117,8 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
               value: '00000000-0000-0000-0000-000000000000'
             }
             {
-             name: 'loki'
-             value: 'http://devops:3100'
+              name: 'loki'
+              value: 'http://devops:3100'
             }
           ]
           resources: {
@@ -141,10 +139,10 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
-            { 
-              name: 'ASPNETCORE_HTTP_PORTS' 
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
               value: '3020'
-              }
+            }
             {
               name: 'Address'
               value: 'http://backend:8200/'
@@ -154,8 +152,8 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
               value: '00000000-0000-0000-0000-000000000000'
             }
             {
-             name: 'ConnectionURI'
-             value: 'http://services:3015'
+              name: 'ConnectionURI'
+              value: 'http://services:3015'
             }
           ]
           resources: {
@@ -176,8 +174,8 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
-            { 
-              name: 'ASPNETCORE_HTTP_PORTS' 
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
               value: '3025'
             }
             {
@@ -189,8 +187,8 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
               value: '00000000-0000-0000-0000-000000000000'
             }
             {
-             name: 'auctionServiceUrl'
-             value: 'http://services:3020'
+              name: 'auctionServiceUrl'
+              value: 'http://services:3020'
             }
           ]
           resources: {
@@ -211,8 +209,8 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           ]
           environmentVariables: [
-            { 
-              name: 'ASPNETCORE_HTTP_PORTS' 
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
               value: '3030'
             }
             {
@@ -224,13 +222,13 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
               value: '00000000-0000-0000-0000-000000000000'
             }
             {
-             name: 'AuctionServiceUrl'
-             value: 'http://services:3020'
+              name: 'AuctionServiceUrl'
+              value: 'http://services:3020'
             }
             {
               name: 'UserServiceUrl'
               value: 'http://services:3010'
-             }
+            }
           ]
           resources: {
             requests: {
@@ -239,7 +237,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
           }
         }
-      } 
+      }
       {
         name: 'nginx'
         properties: {
@@ -247,21 +245,26 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
           ports: [
             {
               port: 4000
+            } 
+          ]
+          environmentVariables: [
+            {
+              name: 'ASPNETCORE_HTTP_PORTS'
+              value: '4000'
             }
           ]
-          environmentVariables: []
+          volumeMounts: [
+            {
+              name: 'nginx'
+              mountPath: '/etc/nginx/' 
+            }
+          ]
           resources: {
             requests: {
               memoryInGB: json('1.0')
               cpu: json('0.5')
             }
           }
-          volumeMounts: [
-            {
-              name: 'nginx-config'
-              mountPath: '/etc/nginx/'
-            }
-          ]
         }
       }
     ]
@@ -279,9 +282,9 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
     osType: 'Linux'
     volumes: [
       {
-        name: 'nginx-config'
+        name: 'nginx'
         azureFile: {
-          shareName: 'storagevault'
+          shareName: 'storagenginx-config'
           storageAccountName: storageAccount.name
           storageAccountKey: storageAccount.listkeys().keys[0].value
         }
@@ -315,10 +318,10 @@ resource dnsRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
     ttl: 3600
     aRecords: [
       {
-        ipv4Address: auktionsHusetDevOpsGroup.properties.ipAddress.ip
+        ipv4Address: auktionsHusetServicesGroup.properties.ipAddress.ip
       }
     ]
   }
 }
 
-output containerIPAddressFqdn string = auktionsHusetDevOpsGroup.properties.ipAddress.ip
+output containerIPAddressFqdn string = auktionsHusetServicesGroup.properties.ipAddress.ip

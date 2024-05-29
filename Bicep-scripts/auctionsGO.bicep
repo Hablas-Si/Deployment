@@ -25,7 +25,7 @@ var shareNames = [
   'queue'
   'grafana'
   'vault'
-  'nginx-config'
+  'nginx'
 ]
 
 // --- Call Bicep submodules ------------------------------
