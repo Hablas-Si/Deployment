@@ -14,11 +14,10 @@ resource VNET 'Microsoft.Network/virtualNetworks@2020-11-01' existing = {
   }
 }
 
-//--- Get a reference to the existing storage account ---
-// bliver aldrig brugt?
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
   name: storageAccountName
 }
+
 
 // --- Create the DevOps container group ---
 @description('auktionsHuset services Container Group')
@@ -260,7 +259,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
           volumeMounts: [
             {
               name: 'nginx-config'
-              mountPath: '/nginx.conf:/etc/nginx/nginx.conf'
+              mountPath: '/etc/nginx/'
             }
           ]
         }
@@ -288,11 +287,24 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
         {
           port: 3030
         }
+        {
+          port: 4000
+        }
       ]
       ip: '10.0.2.4'
       type: 'Private'
     }
     osType: 'Linux'
+    volumes: [
+      {
+        name: 'nginx-config'
+        azureFile: {
+          shareName: 'storagevault'
+          storageAccountName: storageAccount.name
+          storageAccountKey: storageAccount.listkeys().keys[0].value
+        }
+      }
+    ]
     subnetIds: [
       {
         id: VNET::subnet.id

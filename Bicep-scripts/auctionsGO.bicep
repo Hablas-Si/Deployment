@@ -13,17 +13,15 @@ var publicIPAddressName = 'goauctions-public_ip'
 var applicationGateWayName = 'goauctionsAppGateway'
 
 @description('Name of the DNS zone')
-var dnszonename = 'aktionssuperhus.dk'
+var dnszonename = 'hablaauktion123.dk'
 
 // har ændret denne værdi
 @description('Public Domain name used when accessing gateway from internet')
-var publicDomainName = 'aktionssuperhus'
+var publicDomainName = 'hablaauktion123'
 
 @description('List of file shares to create')
 var shareNames = [
   'config'
-  'data'
-  'images'
   'queue'
   'grafana'
   'vault'
@@ -134,39 +132,9 @@ resource applicationGateWay 'Microsoft.Network/applicationGateways@2022-11-01' =
         }
       }
       {
-        name: 'authservicePort'
+        name: 'nginxPort'
         properties: {
-          port: 3005
-        }
-      }
-      {
-        name: 'userservicePort'
-        properties: {
-          port: 3010
-        }
-      }
-      {
-        name: 'catalogservicePort'
-        properties: {
-          port: 3015
-        }
-      }
-      {
-        name: 'auctionservicePort'
-        properties: {
-          port: 3020
-        }
-      }
-      {
-        name: 'biddingservicePort'
-        properties: {
-          port: 3025
-        }
-      }
-      {
-        name: 'legalservicePort'
-        properties: {
-          port: 3030
+          port: 4000
         }
       }
     ]
@@ -232,87 +200,17 @@ resource applicationGateWay 'Microsoft.Network/applicationGateways@2022-11-01' =
         }
       }
       {
-        name: 'authserviceSettings'
+        name: 'nginxHttpSettings'
         properties: {
-            port: 3005
-            protocol: 'Http'
-            cookieBasedAffinity: 'Disabled'
-            connectionDraining: {
+          port: 4000
+          protocol: 'Http'
+          cookieBasedAffinity: 'Disabled'
+          connectionDraining: {
             enabled: false
             drainTimeoutInSec: 1
-            }
-            pickHostNameFromBackendAddress: false
-            requestTimeout: 30
-        }
-      }
-      {
-        name: 'userserviceSettings'
-        properties: {
-            port: 3010
-            protocol: 'Http'
-            cookieBasedAffinity: 'Disabled'
-            connectionDraining: {
-            enabled: false
-            drainTimeoutInSec: 1
-            }
-            pickHostNameFromBackendAddress: false
-            requestTimeout: 30
-        }
-      }
-      {
-        name: 'catalogserviceSettings'
-        properties: {
-            port: 3015
-            protocol: 'Http'
-            cookieBasedAffinity: 'Disabled'
-            connectionDraining: {
-            enabled: false
-            drainTimeoutInSec: 1
-            }
-            pickHostNameFromBackendAddress: false
-            requestTimeout: 30
-        }
-      }
-      {
-        name: 'auctionserviceSettings'
-        properties: {
-            port: 3020
-            protocol: 'Http'
-            cookieBasedAffinity: 'Disabled'
-            connectionDraining: {
-            enabled: false
-            drainTimeoutInSec: 1
-            }
-            pickHostNameFromBackendAddress: false
-            requestTimeout: 30
-        }
-      }
-      {
-        name: 'biddingserviceSettings'
-        properties: {
-            port: 3025
-            protocol: 'Http'
-            cookieBasedAffinity: 'Disabled'
-            connectionDraining: {
-            enabled: false
-            drainTimeoutInSec: 1
-            }
-            pickHostNameFromBackendAddress: false
-            requestTimeout: 30
-        }
-      }
-      {
-        name: 'legalserviceSettings'
-        properties: {
-            port: 3030
-            protocol: 'Http'
-            cookieBasedAffinity: 'Disabled'
-            connectionDraining: {
-            enabled: false
-            drainTimeoutInSec: 1
-            }
-            pickHostNameFromBackendAddress: false
-            requestTimeout: 30
+          }
+          pickHostNameFromBackendAddress: false
+          requestTimeout: 30
         }
       }
     ]
@@ -343,86 +241,19 @@ resource applicationGateWay 'Microsoft.Network/applicationGateways@2022-11-01' =
           requireServerNameIndication: false
         }
       }
-
       {
-        name: 'authserviceHttpListener'
+        name: 'nginxHttpListener'
         properties: {
           frontendIPConfiguration: {
             id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', applicationGateWayName, 'appGwPublicFrontendIp')
           }
           frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'authservicePort')
+            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'nginxPort')
           }
           protocol: 'Http'
           requireServerNameIndication: false
         }
       }
-      {
-        name: 'userserivceHttpListener'
-        properties: {
-          frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', applicationGateWayName, 'appGwPublicFrontendIp')
-          }
-          frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'userservicePort')
-          }
-          protocol: 'Http'
-          requireServerNameIndication: false
-        }
-      }
-      {
-        name: 'catalogserviceHttpListener'
-        properties: {
-          frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', applicationGateWayName, 'appGwPublicFrontendIp')
-          }
-          frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'catalogservicePort')
-          }
-          protocol: 'Http'
-          requireServerNameIndication: false
-        }
-      }
-      {
-        name: 'auctionserivceHttpListener'
-        properties: {
-          frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', applicationGateWayName, 'appGwPublicFrontendIp')
-          }
-          frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'auctionservicePort')
-          }
-          protocol: 'Http'
-          requireServerNameIndication: false
-        }
-      }
-      {
-        name: 'biddingserviceHttpListener'
-        properties: {
-          frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', applicationGateWayName, 'appGwPublicFrontendIp')
-          }
-          frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'biddingservicePort')
-          }
-          protocol: 'Http'
-          requireServerNameIndication: false
-        }
-      }
-       {
-        name: 'legalserviceHttpListener'
-        properties: {
-          frontendIPConfiguration: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', applicationGateWayName, 'appGwPublicFrontendIp')
-          }
-          frontendPort: {
-            id: resourceId('Microsoft.Network/applicationGateways/frontendPorts', applicationGateWayName, 'legalservicePort')
-          }
-          protocol: 'Http'
-          requireServerNameIndication: false
-        }
-      }
-      
     ]
     requestRoutingRules: [
       {
@@ -457,84 +288,19 @@ resource applicationGateWay 'Microsoft.Network/applicationGateways@2022-11-01' =
           }
         }
       }
-
       {
-        name: 'authserviceRule'
+        name: 'nginxRule'
         properties: {
           ruleType: 'Basic'
           priority: 10000
           httpListener: {
-            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGateWayName, 'authserviceHttpListener')
+            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGateWayName, 'nginxHttpListener')
           }
           backendAddressPool: {
             id: resourceId('Microsoft.Network/applicationGateways/backendAddressPools', applicationGateWayName, 'goAuctionsServicesPool')
           }
           backendHttpSettings: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', applicationGateWayName, 'authseviceSettings')
-          }
-        }
-      }
-      {
-        name: 'catalogserviceRule'
-        properties: {
-          ruleType: 'Basic'
-          priority: 9000
-          httpListener: {
-            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGateWayName, 'catalogserviceHttpListener')
-          }
-          backendAddressPool: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendAddressPools', applicationGateWayName, 'goAuctionsServicesPool')
-          }
-          backendHttpSettings: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', applicationGateWayName, 'catalogserviceSettings')
-          }
-        }
-      }
-      {
-        name: 'auctionserviceRule'
-        properties: {
-          ruleType: 'Basic'
-          priority: 8000
-          httpListener: {
-            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGateWayName, 'auctionserviceHttpListener')
-          }
-          backendAddressPool: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendAddressPools', applicationGateWayName, 'goAuctionsServicesPool')
-          }
-          backendHttpSettings: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', applicationGateWayName, 'auctionserviceSettings')
-          }
-        }
-      }
-      {
-        name: 'biddingserviceRule'
-        properties: {
-          ruleType: 'Basic'
-          priority: 7000
-          httpListener: {
-            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGateWayName, 'biddingserviceHttpListener')
-          }
-          backendAddressPool: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendAddressPools', applicationGateWayName, 'goAuctionsServicesPool')
-          }
-          backendHttpSettings: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', applicationGateWayName, 'biddingserviceSettings')
-          }
-        }
-      }
-      {
-        name: 'legalserviceRule'
-        properties: {
-          ruleType: 'Basic'
-          priority: 6000
-          httpListener: {
-            id: resourceId('Microsoft.Network/applicationGateways/httpListeners', applicationGateWayName, 'legalserviceHttpListener')
-          }
-          backendAddressPool: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendAddressPools', applicationGateWayName, 'goAuctionsServicesPool')
-          }
-          backendHttpSettings: {
-            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', applicationGateWayName, 'legalserviceSettings')
+            id: resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection', applicationGateWayName, 'nginxHttpSettings')
           }
         }
       }

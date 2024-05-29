@@ -7,7 +7,7 @@ ResourceGroup=AuktionsHusetRG
 az group create --name $ResourceGroup --location northeurope
 
 # deploy bicep fil
-az deployment group create --resource-group $ResourceGroup --template-file auctionsGO.bicep --verbose
+az deployment group create --resource-group $ResourceGroup --template-file auctionsGO.bicep --debug
 
 # verificer ressourcer i ressourcegruppen
 az resource list --resource-group $ResourceGroup

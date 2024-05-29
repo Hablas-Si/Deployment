@@ -1,0 +1,65 @@
+{
+  "status": "Failed",
+  "error": {
+    "code": "DeploymentFailed",
+    "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/auctionsGO",
+    "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+    "details": [
+      {
+        "code": "ResourceDeploymentFailure",
+        "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/servicesModule",
+        "message": "The resource write operation failed to complete successfully, because it reached terminal provisioning state 'Failed'.",
+        "details": [
+          {
+            "code": "DeploymentFailed",
+            "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/servicesModule",
+            "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+            "details": [
+              {
+                "code": "VolumesNotFound",
+                "message": "Volumes 'nginx-config' in container 'nginx'are not found."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "ResourceDeploymentFailure",
+        "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/backendModule",
+        "message": "The resource write operation failed to complete successfully, because it reached terminal provisioning state 'Failed'.",
+        "details": [
+          {
+            "code": "DeploymentFailed",
+            "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/backendModule",
+            "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+            "details": [
+              {
+                "code": "VolumesNotFound",
+                "message": "Volumes 'vault' in container 'vault'are not found."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "ResourceDeploymentFailure",
+        "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/networkModule",
+        "message": "The resource write operation failed to complete successfully, because it reached terminal provisioning state 'Failed'.",
+        "details": [
+          {
+            "code": "DeploymentFailed",
+            "target": "/subscriptions/5eb974c0-bc27-41ba-95bc-c042475f234d/resourceGroups/AuktionsHusetRG/providers/Microsoft.Resources/deployments/networkModule",
+            "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+            "details": [
+              {
+                "code": "DnsRecordInUse",
+                "message": "DNS record aktionssuperhus.northeurope.cloudapp.azure.com is already used by another public IP.",
+                "details": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -32,7 +32,6 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
         name: 'rabbitmq'
         properties: {
           image: 'rabbitmq:management'
-          // command: ['tail', '-f', '/dev/null']
           ports: [
             {
               port: 15672
@@ -51,50 +50,37 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
           volumeMounts: [
             {
               name: 'msgqueue'
-              mountPath: '/var/lib/rabbitmq'
+              mountPath: '/var/lib/rabbitmq/mnesia/'
             }
           ]
         }
       }
       {
         name: 'vault'
-        properties: {
+        properties:{
           image: 'hashicorp/vault:latest'
-          command: ['vault', 'server', '-config=/vault/config/config.hcl']
-          ports: [
+          command: ['vault', 'server', '-dev', '-dev-root-token-id=00000000-0000-0000-0000-000000000000']
+          ports:[
             {
               port: 8201
             }
           ]
-          environmentVariables: [
-            {
-              name: 'VAULT_TOKEN'
-              value: '00000000-0000-0000-0000-000000000000'
-            }
+           environmentVariables: [
             {
               name: 'VAULT_ADDR'
-              value: 'https://0.0.0.0:8201/'
+              value: 'https://0.0.0.0:8201'
             }
             {
               name: 'VAULT_LOCAL_CONFIG'
-              value: '{"listener": [{"tcp":{"address": "0.0.0.0:8201","tls_disable": "0", "tls_cert_file":"/data/cert.pem","tls_key_file":"/data/key.pem"}}],"default_lease_ttl": "168h", "max_lease_ttl": "720h", "ui": true}'
+              value: '{"listener": [{"tcp":{"address": "0.0.0.0:8200", "tls_disable": "0", "tls_cert_file":"/data/cert.pem", "tls_key_file":"/data/key.pem"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
             }
             {
               name: 'VAULT_DEV_ROOT_TOKEN_ID'
               value: '00000000-0000-0000-0000-000000000000'
             }
-            // skal resten med her nedenunder?
             {
-              name: 'PATH'
-              value: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-            }
-            {
-              name: 'NAME'
-              value: 'vault'
-            }
-            {
-              name: 'VERSION'
-              value: ''
+              name: 'VAULT_TOKEN'
+              value: '00000000-0000-0000-0000-000000000000'
             }
           ]
           resources: {
@@ -106,7 +92,7 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
           volumeMounts: [
             {
               name: 'vault'
-              mountPath: '/vault-volume:/data/'
+              mountPath: '/data/'
             }
           ]
         }
@@ -140,7 +126,7 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
         }
       }
       {
-        name: 'vaultconfig'
+        name: 'vault'
         azureFile: {
           shareName: 'storagevault'
           storageAccountName: storageAccount.name
