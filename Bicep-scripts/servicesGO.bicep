@@ -46,7 +46,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
               name: 'Address'
-              value: 'https://backend:8201/'
+              value: 'http://backend:8200/'
             }
             {
               name: 'Token'
@@ -81,7 +81,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
               }
             {
               name: 'Address'
-              value: 'https://backend:8201/'
+              value: 'http://backend:8200/'
             }
             {
               name: 'Token'
@@ -112,7 +112,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
               name: 'Address'
-              value: 'https://backend:8201/'
+              value: 'http://backend:8200/'
             }
             {
               name: 'Token'
@@ -147,7 +147,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
               }
             {
               name: 'Address'
-              value: 'https://backend:8201/'
+              value: 'http://backend:8200/'
             }
             {
               name: 'Token'
@@ -182,7 +182,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
               name: 'Address'
-              value: 'https://backend:8201/'
+              value: 'http://backend:8200/'
             }
             {
               name: 'Token'
@@ -217,7 +217,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
             }
             {
               name: 'Address'
-              value: 'https://backend:8201/'
+              value: 'http://backend:8200/'
             }
             {
               name: 'Token'
@@ -266,27 +266,9 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
       }
     ]
     initContainers: []
-    restartPolicy: 'Always'
+    restartPolicy: 'Never'
     ipAddress: {
       ports: [
-        {
-          port: 3005
-        }
-        {
-          port: 3010
-        }
-        {
-          port: 3015
-        }
-        {
-          port: 3020
-        }
-        {
-          port: 3025
-        }
-        {
-          port: 3030
-        }
         {
           port: 4000
         }

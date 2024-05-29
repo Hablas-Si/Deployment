@@ -64,6 +64,9 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
             {
               port: 8201
             }
+            {
+              port: 8200
+            }
           ]
            environmentVariables: [
             {
@@ -110,6 +113,9 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
         }
         {
           port: 8201
+        }
+        {
+          port: 8200
         }
       ]
       ip: '10.0.1.4'
