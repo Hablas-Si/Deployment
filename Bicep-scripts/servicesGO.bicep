@@ -52,7 +52,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
             }
             {
               name: 'UserServiceUrl'
-              value: 'http://services:3010'
+              value: 'http://localhost:3010'
             }
             {
               name: 'loki'
@@ -98,7 +98,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
           resources: {
             requests: {
               memoryInGB: json('1.0')
-              cpu: json('0.5')
+              cpu: json('0.25')
             }
           }
         }
@@ -133,7 +133,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
           resources: {
             requests: {
               memoryInGB: json('1.0')
-              cpu: json('0.5')
+              cpu: json('0.25')
             }
           }
         }
@@ -162,7 +162,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
             }
             {
               name: 'ConnectionURI'
-              value: 'http://services:3015'
+              value: 'http://localhost:3015'
             }
             {
               name: 'loki'
@@ -172,7 +172,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
           resources: {
             requests: {
               memoryInGB: json('1.0')
-              cpu: json('0.5')
+              cpu: json('0.25')
             }
           }
         }
@@ -201,7 +201,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
             }
             {
               name: 'auctionServiceUrl'
-              value: 'http://services:3020'
+              value: 'http://localhost:3020'
             }
             {
               name: 'loki'
@@ -211,7 +211,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
           resources: {
             requests: {
               memoryInGB: json('1.0')
-              cpu: json('0.5')
+              cpu: json('0.25')
             }
           }
         }
@@ -241,17 +241,17 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
             }
             {
               name: 'AuctionServiceUrl'
-              value: 'http://services:3020'
+              value: 'http://localhost:3020'
             }
             {
               name: 'UserServiceUrl'
-              value: 'http://services:3010'
+              value: 'http://localhost:3010'
             }
           ]
           resources: {
             requests: {
               memoryInGB: json('1.0')
-              cpu: json('0.5')
+              cpu: json('0.25')
             }
           }
         }
@@ -280,7 +280,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
           resources: {
             requests: {
               memoryInGB: json('1.0')
-              cpu: json('0.5')
+              cpu: json('1')
             }
           }
         }

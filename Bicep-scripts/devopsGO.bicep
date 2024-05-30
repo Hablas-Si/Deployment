@@ -131,5 +131,18 @@ resource dnsRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
     ]
   }
 }
+// Tilføjer en ny DNS record for loki (hjælper til med at finde containeren i loki ui da vi har skrevet loki i alle Nlog.config filer i projekterne)
+resource dnsRecord2 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
+  name: 'loki'
+  parent: dnsZone
+  properties: {
+    ttl: 3600
+    aRecords: [
+      {
+        ipv4Address: auktionsHusetDevOpsGroup.properties.ipAddress.ip
+      }
+    ]
+  }
+}
 
 output containerIPAddressFqdn string = auktionsHusetDevOpsGroup.properties.ipAddress.ip
