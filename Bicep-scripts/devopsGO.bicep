@@ -66,7 +66,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
           }
           volumeMounts: [
             {
-              name: 'grafana-storage'
+              name: 'grafana'
               mountPath: '/var/lib/grafana'
             }
           ]
@@ -90,7 +90,7 @@ resource auktionsHusetDevOpsGroup 'Microsoft.ContainerInstance/containerGroups@2
     osType: 'Linux'
     volumes: [
       {
-        name: 'grafana-storage'
+        name: 'grafana'
         azureFile: {
           shareName: 'storagegrafana'
           storageAccountName: storageAccount.name
