@@ -57,10 +57,14 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
       }
       {
         name: 'vault'
-        properties:{
+        properties: {
           image: 'hashicorp/vault:latest'
-          command: ['vault', 'server', '-dev', '-dev-root-token-id=00000000-0000-0000-0000-000000000000']
-          ports:[
+          command: [
+            'vault'
+            'server'
+            '-dev'
+          ]
+          ports: [
             {
               port: 8201
             }
@@ -68,14 +72,26 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
               port: 8200
             }
           ]
-           environmentVariables: [
+          environmentVariables: [
             {
               name: 'VAULT_ADDR'
-              value: 'https://0.0.0.0:8201'
+              value: 'http://0.0.0.0:8200'
             }
             {
+              name: 'VAULT_API_ADDR'
+              value: 'http://0.0.0.0:8200'
+            }
+            {
+              name: 'VAULT_DEV_LISTEN_ADDRESS'
+              value: '0.0.0.0:8200'
+            }
+            {
+              name: 'VAULT_LOG_LEVEL'
+              value: 'debug'
+            }
+            { 
               name: 'VAULT_LOCAL_CONFIG'
-              value: '{"listener": [{"tcp":{"address": "0.0.0.0:8200", "tls_disable": "0", "tls_cert_file":"/data/cert.pem", "tls_key_file":"/data/key.pem"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
+              value: '{"listener": [{"tcp":{"address": "0.0.0.0:8200", "tls_disable": "1", "tls_cert_file":"/vault/config/cert.pem", "tls_key_file":"/vault/config/key.pem"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
             }
             {
               name: 'VAULT_DEV_ROOT_TOKEN_ID'
@@ -88,18 +104,20 @@ resource auktionsHusetBackendGroup 'Microsoft.ContainerInstance/containerGroups@
           ]
           resources: {
             requests: {
-              memoryInGB: json('1.0')
+              memoryInGB: json('0.5')
               cpu: json('0.5')
             }
           }
           volumeMounts: [
             {
               name: 'vault'
-              mountPath: '/data/'
+              mountPath: '/vault/'
             }
           ]
         }
       }
+      
+      
     ]
     initContainers: []
     restartPolicy: 'Always'

@@ -54,6 +54,11 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
               name: 'UserServiceUrl'
               value: 'http://services:3010'
             }
+            {
+              name: 'loki'
+              value: 'http://devops:3100'
+            }
+          
           ]
           resources: {
             requests: {
@@ -84,6 +89,10 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
             {
               name: 'Token'
               value: '00000000-0000-0000-0000-000000000000'
+            }
+            {
+              name: 'loki'
+              value: 'http://devops:3100'
             }
           ]
           resources: {
@@ -155,6 +164,10 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
               name: 'ConnectionURI'
               value: 'http://services:3015'
             }
+            {
+              name: 'loki'
+              value: 'http://devops:3100'
+            }
           ]
           resources: {
             requests: {
@@ -190,6 +203,10 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
               name: 'auctionServiceUrl'
               value: 'http://services:3020'
             }
+            {
+              name: 'loki'
+              value: 'http://devops:3100'
+            }
           ]
           resources: {
             requests: {
@@ -214,6 +231,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
               value: '3030'
             }
             {
+              //Den value er den originale
               name: 'Address'
               value: 'http://backend:8200/'
             }
@@ -269,14 +287,14 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
       }
     ]
     initContainers: []
-    restartPolicy: 'Never'
+    restartPolicy: 'Always'
     ipAddress: {
       ports: [
         {
           port: 4000
         }
       ]
-      ip: '10.0.2.4'
+      ip: '10.0.3.4'
       type: 'Private'
     }
     osType: 'Linux'
@@ -284,7 +302,7 @@ resource auktionsHusetServicesGroup 'Microsoft.ContainerInstance/containerGroups
       {
         name: 'nginx'
         azureFile: {
-          shareName: 'storagenginx-config'
+          shareName: 'storagenginx'
           storageAccountName: storageAccount.name
           storageAccountKey: storageAccount.listkeys().keys[0].value
         }

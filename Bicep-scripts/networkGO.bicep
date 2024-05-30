@@ -3,7 +3,8 @@ param location string = resourceGroup().location
 param virtualNetworkName string = 'theVNet'
 param publicIPAddressName string = 'thePublicIPAdressName'
 param publicDomainName string = 'publicDomainName'
-param dnszonename string ='thednszone.dk'
+// param dnszonename string ='thednszone.dk'
+param dnszonename string ='hablaauktion123.dk'
 
 var virtualNetworkPrefix = '10.0.0.0/16'
 var subnetPrefix = '10.0.0.0/24'

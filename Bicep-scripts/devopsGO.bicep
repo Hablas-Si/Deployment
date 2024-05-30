@@ -4,7 +4,7 @@ param location string = resourceGroup().location
 param vnetname string = 'theVNet'
 param subnetName string = 'goDevopsSubnet'
 param dnsRecordName string ='devopshostname'
-param dnszonename string='thednszonename.dk'
+param dnszonename string ='thednszone.dk'
 param storageAccountName string='nostorage'
 
 resource VNET 'Microsoft.Network/virtualNetworks@2020-11-01' existing = {
