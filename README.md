@@ -13,26 +13,15 @@ Før du kan bruge disse scripts, skal du have følgende:
 
 1. Clone dette repository:
     ```sh
-    git clone https://github.com/dit-brugernavn/auktionshuset-bicep-deployment.git
-    cd auktionshuset-bicep-deployment
+    git clone https://github.com/Hablas-Si/Deployment.git
     ```
 
-2. Log ind på din Azure konto:
+2. Gå ind i underfolder:
     ```sh
-    az login
+    cd Bicep-scripts
     ```
+3. Kør script  az-commands.sh
 
-3. Opret en ressourcegruppe og deploy Bicep-filen:
-    ```sh
-    export ResourceGroup=AuktionsHusetRG
-    az group create --name $ResourceGroup --location northeurope
-    az deployment group create --resource-group $ResourceGroup --template-file Bicep-scripts/auctionsGO.bicep --debug
-    ```
-
-4. Verificer, at ressourcerne er oprettet korrekt:
-    ```sh
-    az resource list --resource-group $ResourceGroup
-    ```
 
 ## Opdatering af containers
 
@@ -44,15 +33,14 @@ az deployment group create --resource-group $ResourceGroup --template-file Bicep
 
 
 ## Bemærk
-Hvis du skal allokere mere eller mindre CPU eller hukommelse til hver service, skal du slette containergruppen og derefter udføre kommandoerne igen:
+Hvis du skal allokere mere eller mindre CPU eller hukommelse til en service, skal du slette containergruppen på azure portalen og derefter udføre kommandoerne igen:
 
 ```sh
-az container delete --name auktionsHusetDevOpsGroup --resource-group $ResourceGroup
 az deployment group create --resource-group $ResourceGroup --template-file Bicep-scripts/auctionsGO.bicep --debug
  ```
 
 ## Administration af ressourcer
-For at spare på din Azure-konto kan du bruge shutdown.sh og startup.sh scripts til at slukke og starte alle ressourcer i din ressourcegruppe.
+For at spare på din Azure-konto kan du bruge shutdown.sh og startup.sh scripts til at slukke og starte alle ressourcer i din ressourcegruppe. 
 
 Startup Script
 Kør startup.sh for at starte alle ressourcer i ressourcegruppen:
