@@ -13,11 +13,11 @@ var publicIPAddressName = 'goauctions-public_ip'
 var applicationGateWayName = 'goauctionsAppGateway'
 
 @description('Name of the DNS zone')
-var dnszonename = 'hablaauktion123.dk'
+var dnszonename = 'hablaauktion.dk'
 
 // har ændret denne værdi
 @description('Public Domain name used when accessing gateway from internet')
-var publicDomainName = 'hablaauktion123'
+var publicDomainName = 'hablaauktion'
 
 @description('List of file shares to create')
 var shareNames = [
